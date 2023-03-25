@@ -27,6 +27,6 @@ namespace CMSClone.Shared.Models
         public Guid CourseId { get; set; }
         public Course? Course { get; set; }
 
-        public ICollection<FileUpload>? FilesUploadGiven { get; set; }
+        public virtual ICollection<FileUpload>? FilesUploadGiven { get; set; }
     }
 }

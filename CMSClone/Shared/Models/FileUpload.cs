@@ -25,8 +25,6 @@ namespace CMSClone.Shared.Models
         [MaxLength(10)]
         public string? FileUploadExtensions { get; set; }
 
-        [Required]
-        [ForeignKey("Assignment")]
         public Guid AssignmentId { get; set; }
 
         public Assignment? Assignment { get; set; }

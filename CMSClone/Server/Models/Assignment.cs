@@ -23,18 +23,17 @@ namespace CMSClone.Server.Models
         [Required]
         [MaxLength(50)]
         public string? SubmissionType { get; set; }
-        [Required]
-        [ForeignKey("Course")]
+
+
         public Guid CourseId { get; set; }
-        public Course? Course { get; set; }
+        public virtual Course? Course { get; set; }
 
         [Range(0.0d, 10.0d)]
         public double GivenGrade { get; set; }
 
 
-        public ICollection<FileUpload>? FilesUploadGiven { get; set; }
+        public virtual ICollection<FileUpload>? FilesUploadGiven { get; set; }
 
-        public ICollection<FileUpload>? FilesUploadSubmitted { get; set; }
-
+        public virtual ICollection<Submit>? Submits { get; set; }
     }
 }

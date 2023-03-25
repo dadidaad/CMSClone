@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMSClone.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230325133536_RolesAdd")]
-    partial class RolesAdd
+    [Migration("20230325164633_AddModelsToCMSClone")]
+    partial class AddModelsToCMSClone
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,10 @@ namespace CMSClone.Server.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -87,6 +91,137 @@ namespace CMSClone.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Assignment", b =>
+                {
+                    b.Property<Guid>("AssignmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("GivenGrade")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SubmissionType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("AssignmentId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Assignments");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Course", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CourseCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CourseId");
+
+                    b.HasAlternateKey("CourseCode")
+                        .HasName("AlternateKey_CourseCode");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.FileUpload", b =>
+                {
+                    b.Property<Guid>("FileUploadID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssignmentBelongToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileUploadExtensions")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("FileUploadName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("FileUploadPath")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("FileUploadID");
+
+                    b.HasIndex("AssignmentBelongToId");
+
+                    b.ToTable("FileUploads");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.StudentsCourse", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("StudentId", "CourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("StudentCourses");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Submit", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(1);
+
+                    b.Property<Guid?>("AssignmentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(3);
+
+                    b.Property<Guid>("FileUploadId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime?>("SubmittedTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StudentId", "AssignmentId", "FileUploadId");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("FileUploadId");
+
+                    b.ToTable("Submits");
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -259,17 +394,17 @@ namespace CMSClone.Server.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "abada37a-a134-473f-b1e0-2757e0b4bee4",
-                            ConcurrencyStamp = "1e513f89-6041-432b-8c96-c1d0a3b279de",
+                            Id = "baab60ca-75b2-46c6-b1f6-177b4db3b4cf",
+                            ConcurrencyStamp = "372b4c93-eb7b-49ad-a832-8135cc182d07",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
-                            Id = "bc012725-fdc6-4e92-a8cb-40ea9eb65bc3",
-                            ConcurrencyStamp = "00abca4d-1a0f-4f53-be7b-1bb6fdee17ec",
+                            Id = "0463838b-a80b-4991-81eb-13fe5bcf9810",
+                            ConcurrencyStamp = "f6832dad-cf06-4c30-a991-4f621dfe093e",
                             Name = "Teacher",
-                            NormalizedName = "Teacher"
+                            NormalizedName = "TEACHER"
                         });
                 });
 
@@ -383,6 +518,85 @@ namespace CMSClone.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CMSClone.Server.Models.Assignment", b =>
+                {
+                    b.HasOne("CMSClone.Server.Models.Course", "Course")
+                        .WithMany("Assignments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Course", b =>
+                {
+                    b.HasOne("CMSClone.Server.Models.ApplicationUser", "Creator")
+                        .WithMany("CoursesCreated")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.FileUpload", b =>
+                {
+                    b.HasOne("CMSClone.Server.Models.Assignment", "AssignmentBelongTo")
+                        .WithMany("FilesUploadGiven")
+                        .HasForeignKey("AssignmentBelongToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssignmentBelongTo");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.StudentsCourse", b =>
+                {
+                    b.HasOne("CMSClone.Server.Models.Course", "Course")
+                        .WithMany("Students")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CMSClone.Server.Models.ApplicationUser", "Student")
+                        .WithMany("CoursesJoin")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Submit", b =>
+                {
+                    b.HasOne("CMSClone.Server.Models.Assignment", "Assignment")
+                        .WithMany("Submits")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CMSClone.Server.Models.FileUpload", "FileUploadSubmitted")
+                        .WithMany("SubmitFiles")
+                        .HasForeignKey("FileUploadId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CMSClone.Server.Models.ApplicationUser", "Student")
+                        .WithMany("AssignmentsSubmitted")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("FileUploadSubmitted");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -432,6 +646,34 @@ namespace CMSClone.Server.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("AssignmentsSubmitted");
+
+                    b.Navigation("CoursesCreated");
+
+                    b.Navigation("CoursesJoin");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Assignment", b =>
+                {
+                    b.Navigation("FilesUploadGiven");
+
+                    b.Navigation("Submits");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.Course", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("CMSClone.Server.Models.FileUpload", b =>
+                {
+                    b.Navigation("SubmitFiles");
                 });
 #pragma warning restore 612, 618
         }

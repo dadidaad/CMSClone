@@ -23,7 +23,7 @@ namespace CMSClone.Server.Models
         public string? CreatorId { get; set; }
 
         public virtual ICollection<Assignment>? Assignments { get; set; }
-        public virtual ICollection<ApplicationUser>? Students { get; set; }
+        public virtual ICollection<StudentsCourse>? Students { get; set; }
         public virtual ApplicationUser? Creator { get; set; }
     }
 }

@@ -25,10 +25,10 @@ namespace CMSClone.Server.Models
         [MaxLength(10)]
         public string? FileUploadExtensions { get; set; }
 
-        [Required]
-        [ForeignKey("Assignment")]
-        public Guid AssignmentId { get; set; }
+        public Guid AssignmentBelongToId { get; set; }
 
-        public Assignment Assignment { get; set; }
+        public virtual Assignment? AssignmentBelongTo { get; set; }
+
+        public virtual ICollection<Submit>? SubmitFiles { get; set; }
     }
 }

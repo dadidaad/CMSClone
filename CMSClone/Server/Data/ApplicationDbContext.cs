@@ -14,10 +14,11 @@ namespace CMSClone.Server.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Assignment> Assignments { get; set; }
-        public DbSet<FileUpload> FileUploads { get; set; }
-        public DbSet<StudentsCourse> StudentCourses { get; set; }
+        public DbSet<Course>? Courses { get; set; }
+        public DbSet<Assignment>? Assignments { get; set; }
+        public DbSet<FileUpload>? FileUploads { get; set; }
+        public DbSet<StudentsCourse>? StudentCourses { get; set; }
+        public DbSet<Submit>? Submits  { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,9 +26,36 @@ namespace CMSClone.Server.Data
 
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.Entity<Course>().HasAlternateKey(c => c.CourseCode).HasName("AlternateKey_CourseCode");
-            builder.Entity<Course>().HasOne<ApplicationUser>(c => c.Creator)
+            builder.Entity<Course>().HasOne(c => c.Creator)
                 .WithMany(g => g.CoursesCreated).HasForeignKey(s => s.CreatorId).IsRequired();
-            builder.Entity<StudentsCourse>().HasKey(x => new { x.StudentId, x.CourseId });
+            builder.Entity<FileUpload>().HasOne(c => c.AssignmentBelongTo)
+                .WithMany(g => g.FilesUploadGiven).HasForeignKey(s => s.AssignmentBelongToId).IsRequired();
+            builder.Entity<Assignment>().HasOne(c => c.Course)
+                .WithMany(g => g.Assignments).HasForeignKey(s => s.CourseId).IsRequired();
+            builder.Entity<Submit>().HasKey(x => new { x.StudentId, x.AssignmentId, x.FileUploadId });
+            builder.Entity<Submit>().HasOne(c => c.Student)
+                .WithMany(c => c.AssignmentsSubmitted)
+                .HasForeignKey(s => s.StudentId).IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Submit>().HasOne(c => c.Assignment)
+                .WithMany(c => c.Submits)
+                .HasForeignKey(s => s.AssignmentId).IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Submit>().HasOne(c => c.FileUploadSubmitted)
+                .WithMany(c => c.SubmitFiles)
+                .HasForeignKey(s => s.FileUploadId).IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<StudentsCourse>().HasKey(x => new { x.StudentId, x.CourseId});
+
+            builder.Entity<StudentsCourse>().HasOne(s => s.Student)
+                .WithMany(c => c.CoursesJoin)
+                .HasForeignKey(s => s.StudentId).IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<StudentsCourse>().HasOne(s => s.Course)
+                .WithMany(c => c.Students)
+                .HasForeignKey(s => s.CourseId).IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
