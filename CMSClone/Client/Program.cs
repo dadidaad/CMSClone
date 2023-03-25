@@ -14,5 +14,4 @@ builder.Services.AddHttpClient("CMSClone.ServerAPI", client => client.BaseAddres
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CMSClone.ServerAPI"));
 
 builder.Services.AddApiAuthorization();
-
 await builder.Build().RunAsync();
