@@ -1,0 +1,27 @@
+﻿@using CMSClone.Client.HttpRepositories
+@using CMSClone.Shared.DTOs
+@using CMSClone.Shared.Models
+<ul>
+    @foreach (var coursejoin in CourseJoinDTOs)
+    {
+        <li>
+            @coursejoin.Teacher.DisplayName
+        </li>
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public CourseDTO CourseDTO { get; set; }
+    [Inject]
+    public ICourseJoinHttpRepository CourseJoinRepo { get; set; }
+    public List<CourseJoinDTO> CourseJoinDTOs { get; set; } = new List<CourseJoinDTO>();
+    private async Task GetTeacherInCourses(CourseDTO courseDTO)
+    {
+        CourseJoinDTOs =  await CourseJoinRepo.GetTeacherInCourse(courseDTO.CourseId);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetTeacherInCourses(CourseDTO);
+    }
+}

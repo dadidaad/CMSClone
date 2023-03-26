@@ -1,6 +1,7 @@
 ﻿using CMSClone.Server.Models;
 using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Reflection.Emit;
@@ -17,9 +18,8 @@ namespace CMSClone.Server.Data
         public DbSet<Course>? Courses { get; set; }
         public DbSet<Assignment>? Assignments { get; set; }
         public DbSet<FileUpload>? FileUploads { get; set; }
-        public DbSet<StudentsCourse>? StudentCourses { get; set; }
+        public DbSet<CourseJoin>? CourseJoins { get; set; }
         public DbSet<Submit>? Submits  { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -45,17 +45,16 @@ namespace CMSClone.Server.Data
                 .WithMany(c => c.SubmitFiles)
                 .HasForeignKey(s => s.FileUploadId).IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<StudentsCourse>().HasKey(x => new { x.StudentId, x.CourseId});
+            builder.Entity<CourseJoin>().HasKey(x => new { x.UserId, x.CourseId});
 
-            builder.Entity<StudentsCourse>().HasOne(s => s.Student)
+            builder.Entity<CourseJoin>().HasOne(s => s.User)
                 .WithMany(c => c.CoursesJoin)
-                .HasForeignKey(s => s.StudentId).IsRequired()
+                .HasForeignKey(s => s.UserId).IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<StudentsCourse>().HasOne(s => s.Course)
-                .WithMany(c => c.Students)
+            builder.Entity<CourseJoin>().HasOne(s => s.Course)
+                .WithMany(c => c.UsersJoin)
                 .HasForeignKey(s => s.CourseId).IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

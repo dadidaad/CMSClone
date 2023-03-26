@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMSClone.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,8 @@ namespace CMSClone.Shared.DTOs
     {
         public string UserId { get; set; }
         public Guid CourseId { get; set; }
+
+        public Teacher? Teacher { get; set; }
+        public CourseDTO? CourseDTO { get; set; }
     }
 }

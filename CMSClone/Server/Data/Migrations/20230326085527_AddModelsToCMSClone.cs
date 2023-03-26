@@ -259,15 +259,15 @@ namespace CMSClone.Server.Data.Migrations
                 name: "StudentCourses",
                 columns: table => new
                 {
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentCourses", x => new { x.StudentId, x.CourseId });
+                    table.PrimaryKey("PK_StudentCourses", x => new { x.UserId, x.CourseId });
                     table.ForeignKey(
-                        name: "FK_StudentCourses_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
+                        name: "FK_StudentCourses_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -335,12 +335,12 @@ namespace CMSClone.Server.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "0463838b-a80b-4991-81eb-13fe5bcf9810", "f6832dad-cf06-4c30-a991-4f621dfe093e", "Teacher", "TEACHER" });
+                values: new object[] { "2505696a-127e-4d8c-a457-99d04b0c24ef", "495074cd-e214-4204-bdbb-155c20c60300", "Teacher", "TEACHER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "baab60ca-75b2-46c6-b1f6-177b4db3b4cf", "372b4c93-eb7b-49ad-a832-8135cc182d07", "Student", "STUDENT" });
+                values: new object[] { "5b8cbef3-14ee-455f-8a1f-670d2f637444", "a5b9c615-1612-4d21-b7ef-a3d8efd0f9a8", "Student", "STUDENT" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

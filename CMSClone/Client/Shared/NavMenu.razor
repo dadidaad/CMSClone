@@ -19,16 +19,21 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="courseSearch">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Course
+            </NavLink>
+        </div>
         <AuthorizeView>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="course">
+                <NavLink class="nav-link" href="courseJoin">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Course Joined
                 </NavLink>
             </div>
         </AuthorizeView>
         <AuthorizeView Roles="@Roles.Teacher">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="course">
+                <NavLink class="nav-link" href="courseManager">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Course Created
                 </NavLink>
             </div>

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using CourseJoin = CMSClone.Server.Models.CourseJoin;
 
 namespace CMSClone.Server.Controllers
 {
@@ -20,10 +21,10 @@ namespace CMSClone.Server.Controllers
     public class CoursesController : ControllerBase
     {
         private readonly ICourseRepository _courseRepository;
-        private readonly ICourseStudentRepository _courseStudentRepository;
+        private readonly ICourseJoinRepository _courseStudentRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
-        public CoursesController(ICourseRepository courseRepository, ICourseStudentRepository courseStudentRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public CoursesController(ICourseRepository courseRepository, ICourseJoinRepository courseStudentRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _courseRepository = courseRepository;
             _courseStudentRepository = courseStudentRepository;
@@ -38,9 +39,14 @@ namespace CMSClone.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Course> GetCoursesByCode(string courseCode)
+        [Route("getcourses")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCourses([FromQuery] RequestParameters requestParameters)
         {
-            return _courseRepository.GetCourses(courseCode);
+            var courses = await _courseRepository.GetCourses(requestParameters);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(courses.MetaData));
+            var coursesDTO = _mapper.Map<PagedList<CourseDTO>>(courses);
+            return Ok(coursesDTO);
         }
 
         [HttpGet]
@@ -68,6 +74,7 @@ namespace CMSClone.Server.Controllers
                 return StatusCode(420, "Invalid data");
             }
             var course = _mapper.Map<Course>(courseDTO);
+            course.CourseId = Guid.NewGuid();
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             course.CreatorId = currentUserId;
             await _courseRepository.Insert(course);
@@ -76,9 +83,9 @@ namespace CMSClone.Server.Controllers
                 CourseId = course.CourseId,
                 UserId = currentUserId
             };
-            var studentCourse = _mapper.Map<StudentsCourse>(courseJoinDTO);
+            var studentCourse = _mapper.Map<CourseJoin>(courseJoinDTO);
             await _courseStudentRepository.Insert(studentCourse);
-            return Created("Insert", course);
+            return Created("Insert", courseDTO);
         }
 
         [HttpPut]

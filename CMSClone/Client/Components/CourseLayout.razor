@@ -1,19 +1,57 @@
-﻿@using CMSClone.Shared.Models
-    @foreach (var course in CourseDTOs)
-    {
-        <div class="card" style="width: 18rem;">
-            <img src="course.png" class="card-img-top">
-            <div class="card-body">
-                <h5 class="card-title">@course.CourseCode</h5>
-                <p class="card-text">Course Creator: @course.CreatorName </p>
-                <ul>
-                    <li> <p class="card-text">Teacher:</p></li>
-                </ul>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+﻿@using CMSClone.Client.HttpRepositories
+@using CMSClone.Shared.DTOs
+@using CMSClone.Shared.Models
+    @if(ActionState == "Manager"){
+        @foreach (var course in CourseDTOs)
+        {
+            <div class="card" style="width: 18rem;">
+                <img src="course.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@course.CourseCode</h5>
+                    <p class="card-text">Course Creator: @course.CreatorName </p>
+                    <p class="card-text mb-0">Teacher:</p>
+                    <ListTeacher CourseDTO="@course"></ListTeacher>
+                    <a href="#" class="btn btn-primary">Update</a>
+                </div>
             </div>
-        </div>
+        }
+    }
+    @if(ActionState == "Join"){
+        @foreach (var course in CourseJoinDTOs)
+        {
+            <div class="card" style="width: 18rem;">
+                <img src="course.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@course.CourseDTO.CourseCode</h5>
+                    <p class="card-text">Course Creator: @course.CourseDTO.CreatorName</p>
+                    <p class="card-text mb-0">Teacher:</p>
+                    <ListTeacher CourseDTO="@course.CourseDTO"></ListTeacher>
+                    <a href="#" class="btn btn-primary disabled">Enrolled</a>
+                </div>
+            </div>
+        }
+    }
+    @if (ActionState == "Search")
+    {
+        @foreach (var course in CourseDTOs)
+        {
+            <div class="card" style="width: 18rem;">
+                <img src="course.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">@course.CourseCode</h5>
+                    <p class="card-text">Course Creator: @course.CreatorName </p>
+                    <p class="card-text mb-0">Teacher:</p>
+                    <ListTeacher CourseDTO="@course"></ListTeacher>
+                    <a href="#" class="btn btn-primary">Enroll me</a>
+                </div>
+            </div>
+        }
     }
 @code {
     [Parameter]
     public List<CourseDTO> CourseDTOs { get; set; }
+    [Parameter]
+    public List<CourseJoinDTO> CourseJoinDTOs { get; set; } = new List<CourseJoinDTO>();
+    [Parameter]
+    public string ActionState { get; set; }
 }

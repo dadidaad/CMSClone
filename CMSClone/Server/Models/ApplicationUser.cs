@@ -10,9 +10,8 @@ namespace CMSClone.Server.Models
         public string? DisplayName { get; set; }
 
         public virtual ICollection<Course>? CoursesCreated { get; set; }
-        public virtual ICollection<StudentsCourse>? CoursesJoin { get; set; }
+        public virtual ICollection<CourseJoin>? CoursesJoin { get; set; }
         public virtual ICollection<Submit>? AssignmentsSubmitted { get; set; }
-        public virtual ICollection<UserRole> UserRoles { get; set; }
 
     }
 }

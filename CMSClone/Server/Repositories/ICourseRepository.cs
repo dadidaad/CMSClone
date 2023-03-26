@@ -7,7 +7,7 @@ namespace CMSClone.Server.Repositories
     {
         public IEnumerable<Course> GetAllCourses();
         public Course GetCourse(Guid courseId);
-        public IEnumerable<Course> GetCourses(string courseCode);
+        public Task<PagedList<Course>> GetCourses(RequestParameters requestParameters);
         public Task<PagedList<Course>> GetCoursesByCreator(string creatorId, RequestParameters requestParameters);
         public Task Insert(Course course);
         public Task Update(Course course);

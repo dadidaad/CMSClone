@@ -8,5 +8,6 @@ namespace CMSClone.Client.HttpRepositories
     {
         Task CreateCourse(CourseDTO courseDTO);
         Task<PagingRespone<CourseDTO>> GetCourseByCreator(RequestParameters requestParameters);
+        Task<PagingRespone<CourseDTO>> GetCourse(RequestParameters requestParameters);
     }
 }

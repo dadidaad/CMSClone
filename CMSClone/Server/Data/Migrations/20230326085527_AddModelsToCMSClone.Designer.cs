@@ -4,6 +4,7 @@ using CMSClone.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMSClone.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230326085527_AddModelsToCMSClone")]
+    partial class AddModelsToCMSClone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,7 +165,7 @@ namespace CMSClone.Server.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseJoins");
+                    b.ToTable("StudentCourses");
                 });
 
             modelBuilder.Entity("CMSClone.Server.Models.FileUpload", b =>
@@ -392,15 +394,15 @@ namespace CMSClone.Server.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "90cabdef-3caf-44ba-8bda-25c0dd49f2cf",
-                            ConcurrencyStamp = "cf77b3ca-1723-4046-9120-3c3466f7ca75",
+                            Id = "5b8cbef3-14ee-455f-8a1f-670d2f637444",
+                            ConcurrencyStamp = "a5b9c615-1612-4d21-b7ef-a3d8efd0f9a8",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
-                            Id = "6876ebdb-b5d6-4f9b-be70-363d3415e6a1",
-                            ConcurrencyStamp = "162f1b1f-0d50-4434-83e3-f9c67e8b61d2",
+                            Id = "2505696a-127e-4d8c-a457-99d04b0c24ef",
+                            ConcurrencyStamp = "495074cd-e214-4204-bdbb-155c20c60300",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         });

@@ -6,11 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CMSClone.Server.Repositories.Implements;
 using CMSClone.Server.Repositories;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
 var configuration = builder.Configuration;
 // Add services to the container.
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -18,6 +23,8 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 builder.Services.AddCors(policy =>
 {
     policy.AddPolicy("CorsPolicy", opt => opt
@@ -45,7 +52,7 @@ builder.Services.AddAuthentication()
     });
 
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
-builder.Services.AddScoped<ICourseStudentRepository, CourseStudentRepository>();
+builder.Services.AddScoped<ICourseJoinRepository, CourseJoinRepository>();
 
 var app = builder.Build();
 

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using CourseJoin = CMSClone.Server.Models.CourseJoin;
 
 namespace CMSClone.Server.Controllers
 {
@@ -18,33 +19,44 @@ namespace CMSClone.Server.Controllers
     //[Authorize]
     public class CourseJoinController : ControllerBase
     {
-        private readonly ICourseStudentRepository _courseStudentRepository;
+        private readonly ICourseJoinRepository _courseJoinRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
-        public CourseJoinController(ICourseStudentRepository courseStudentRepository, ICourseRepository courseRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
+        public CourseJoinController(ICourseJoinRepository courseJoinRepository, ICourseRepository courseRepository, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
-            _courseStudentRepository = courseStudentRepository;
+            _courseJoinRepository = courseJoinRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
             _mapper = mapper;
         }
 
         [HttpGet]
+        [Route("getallcoursesjoin")]
+        public async Task<IActionResult> GetAllCoursesJoin()
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var courseJoin = await _courseJoinRepository.GetAllCoursesJoinOfUser(currentUserId);
+            return Ok(courseJoin);
+        }
+        [HttpGet]
         [Route("getcoursesjoin")]
         public async Task<IActionResult> GetCoursesJoin([FromQuery]RequestParameters requestParameters)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var courseJoin = await _courseStudentRepository.GetCoursesJoin(currentUserId, requestParameters);
+            var courseJoin = await _courseJoinRepository.GetCoursesJoin(currentUserId, requestParameters);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(courseJoin.MetaData));
-            return Ok(courseJoin);
+            var courseJoinDTO = _mapper.Map<PagedList<CourseJoinDTO>>(courseJoin);
+            return Ok(courseJoinDTO);
         }
         [HttpGet]
         [Route("getcoursesjoinwithteacher")]
-        public async Task<IActionResult> GetCoursesJoinWithTeacher(string courseCode)
+        public async Task<IActionResult> GetCoursesJoinWithTeacher(Guid courseId)
         {
-            var courseJoin = await _courseStudentRepository.GetTeacherInCourse(courseCode);
-            return Ok(courseJoin);
+            var teacher = await _userManager.GetUsersInRoleAsync("Teacher");
+            var courseJoin = await _courseJoinRepository.GetTeacherInCourse(courseId, teacher.ToList());
+            var courseJoinDT0 = _mapper.Map<List<CourseJoinDTO>>(courseJoin);
+            return Ok(courseJoinDT0);
         }
         [HttpPost]
         public async Task<IActionResult> Join([FromBody] Guid courseId)
@@ -60,8 +72,8 @@ namespace CMSClone.Server.Controllers
                 CourseId = courseId,
                 UserId = currentUserId
             };
-            var studentCourse = _mapper.Map<StudentsCourse>(courseJoinDTO);
-            await _courseStudentRepository.Insert(studentCourse);
+            var studentCourse = _mapper.Map<CourseJoin>(courseJoinDTO);
+            await _courseJoinRepository.Insert(studentCourse);
             return Created("", courseJoinDTO);
 
         }

@@ -4,7 +4,7 @@ namespace CMSClone.Server.Repositories.Extensions
 {
     public static class CourseStudentRepositoryExtension
     {
-        public static IQueryable<StudentsCourse> Search(this IQueryable<StudentsCourse> coursesStudent, string searchTearm)
+        public static IQueryable<CourseJoin> Search(this IQueryable<CourseJoin> coursesStudent, string searchTearm)
         {
             if (string.IsNullOrWhiteSpace(searchTearm))
                 return coursesStudent;

@@ -31,12 +31,7 @@ namespace CMSClone.Server.Repositories.Implements
             return _context.Courses.FirstOrDefault(c => c.CourseId == courseId) ;
         }
 
-        public IEnumerable<Course> GetCourses(string courseCode)
-        {
-            return _context.Courses.Where(c => c.CourseCode.Contains(courseCode)).ToList();
-        }
-
-        public async Task<PagedList<Course>> GetCoursesByCreator(string creatorId, RequestParameters requestParameters)
+        public async Task<PagedList<Course>> GetCourses(RequestParameters requestParameters)
         {
             var courses = await _context.Courses.Include(c => c.Creator)
                 .Search(requestParameters.SearchTerm)
@@ -44,10 +39,25 @@ namespace CMSClone.Server.Repositories.Implements
             return PagedList<Course>.ToPagedList(courses, requestParameters.PageNumber, requestParameters.PageSize);
         }
 
+        public async Task<PagedList<Course>> GetCoursesByCreator(string creatorId, RequestParameters requestParameters)
+        {
+            var courses = await _context.Courses.Include(c => c.Creator).Where(c => c.CreatorId == creatorId)
+                .Search(requestParameters.SearchTerm)
+                .Sort(requestParameters.OrderBy).ToListAsync();
+            return PagedList<Course>.ToPagedList(courses, requestParameters.PageNumber, requestParameters.PageSize);
+        }
+
         public async Task Insert(Course course)
         {
-             _context.Courses.Add(course);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Courses.Add(course);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public void Save()

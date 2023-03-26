@@ -1,0 +1,63 @@
+﻿@page "/courseSearch"
+@using CMSClone.Client.Components
+@using CMSClone.Client.HttpRepositories
+@using CMSClone.Shared
+@using CMSClone.Shared.DTOs
+@using CMSClone.Shared.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [AllowAnonymous]
+<h3>Courses</h3>
+<div class="row">
+    <div class="col-md-5">
+        <Search OnSearchChanged="SearchChanged" />
+    </div>
+</div>
+<div class="d-flex justify-content-around">
+    <CourseLayout CourseDTOs="courseDTOs" ActionState="@ActionState"></CourseLayout>
+</div>
+<div class="row">
+    <div class="col">
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
+    </div>
+</div>
+@code {
+    public List<CourseDTO> courseDTOs { get; set; } = new List<CourseDTO>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    public string ActionState { get; set; } = "Search";
+    private RequestParameters _requestParameters = new RequestParameters();
+
+    [Inject]
+    public ICourseHttpRepository CourseRepo { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await GetCourse();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        _requestParameters.PageNumber = page;
+        await GetCourse();
+    }
+
+    private async Task GetCourse()
+    {
+        var pagingResponse = await CourseRepo.GetCourse(_requestParameters);
+        courseDTOs = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
+
+    private async Task SearchChanged(string searchTerm)
+    {
+        Console.WriteLine(searchTerm);
+        _requestParameters.PageNumber = 1;
+        _requestParameters.SearchTerm = searchTerm;
+        await GetCourse();
+    }
+
+    private async Task SortChanged(string orderBy)
+    {
+        Console.WriteLine(orderBy);
+        _requestParameters.OrderBy = orderBy;
+        await GetCourse();
+    }
+}

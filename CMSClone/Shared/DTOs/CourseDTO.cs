@@ -11,7 +11,7 @@ namespace CMSClone.Shared.Models
 {
     public class CourseDTO
     {
-        public Guid CourseId;
+        public Guid CourseId { get; set; }
         [Required]
         [MaxLength(10, ErrorMessage = "Name is too long.")]
         public string? CourseCode { get; set; }
@@ -21,6 +21,5 @@ namespace CMSClone.Shared.Models
 
         public string? CreatorName { get; set; }
 
-        public virtual List<Teacher>? Teachers { get; set; }
     }
 }
