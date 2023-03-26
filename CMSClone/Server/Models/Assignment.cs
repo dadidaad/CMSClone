@@ -31,9 +31,6 @@ namespace CMSClone.Server.Models
         [Range(0.0d, 10.0d)]
         public double GivenGrade { get; set; }
 
-
-        public virtual ICollection<FileUpload>? FilesUploadGiven { get; set; }
-
         public virtual ICollection<Submit>? Submits { get; set; }
     }
 }

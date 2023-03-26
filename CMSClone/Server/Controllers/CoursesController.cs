@@ -77,6 +77,7 @@ namespace CMSClone.Server.Controllers
             course.CourseId = Guid.NewGuid();
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             course.CreatorId = currentUserId;
+
             await _courseRepository.Insert(course);
             var courseJoinDTO = new CourseJoinDTO()
             {

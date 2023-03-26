@@ -1,8 +1,12 @@
-﻿namespace CMSClone.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CMSClone.Server.Models
 {
     public class CourseJoin
     {
-
+        [Key]
+        public int Id { get; set; }
         public string UserId { get; set; } 
         public virtual ApplicationUser User { get; set; }
 

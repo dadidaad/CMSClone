@@ -13,7 +13,8 @@ namespace CMSClone.Server.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid FileUploadID { get; set; }
-
+        [Required]
+        public Guid SubmitID { get; set; }
         [MaxLength(255)]
         public string? FileUploadName { get; set; }
 
@@ -25,10 +26,6 @@ namespace CMSClone.Server.Models
         [MaxLength(10)]
         public string? FileUploadExtensions { get; set; }
 
-        public Guid AssignmentBelongToId { get; set; }
-
-        public virtual Assignment? AssignmentBelongTo { get; set; }
-
-        public virtual ICollection<Submit>? SubmitFiles { get; set; }
+        public virtual Submit? Submit { get; set; }
     }
 }
