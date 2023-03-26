@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMSClone.Shared.DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace CMSClone.Shared.Models
 {
-    public class Course
+    public class CourseDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CourseId { get; set; }
+        public Guid CourseId;
         [Required]
-        [MaxLength(10)]
+        [MaxLength(10, ErrorMessage = "Name is too long.")]
         public string? CourseCode { get; set; }
         [Required]
         [MaxLength(255)]
         public string? CourseName { get; set; }  
 
+        public string? CreatorName { get; set; }
+
+        public virtual List<Teacher>? Teachers { get; set; }
     }
 }

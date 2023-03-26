@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using System.Security.Claims
+@using CMSClone.Client.HttpRepositories
+@using CMSClone.Shared
+@using CMSClone.Shared.Models
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">CMSClone</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -14,23 +19,27 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
+        <AuthorizeView>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="course">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Course Joined
+                </NavLink>
+            </div>
+        </AuthorizeView>
+        <AuthorizeView Roles="@Roles.Teacher">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="course">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Course Created
+                </NavLink>
+            </div>
+        </AuthorizeView>
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
 
     private void ToggleNavMenu()
     {

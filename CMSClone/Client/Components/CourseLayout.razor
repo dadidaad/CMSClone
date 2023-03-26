@@ -1,0 +1,19 @@
+﻿@using CMSClone.Shared.Models
+    @foreach (var course in CourseDTOs)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="course.png" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">@course.CourseCode</h5>
+                <p class="card-text">Course Creator: @course.CreatorName </p>
+                <ul>
+                    <li> <p class="card-text">Teacher:</p></li>
+                </ul>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    }
+@code {
+    [Parameter]
+    public List<CourseDTO> CourseDTOs { get; set; }
+}

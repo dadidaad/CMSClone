@@ -143,7 +143,7 @@ namespace CMSClone.Server.Areas.Identity.Pages.Account
                     Input = new InputModel
                     {
                         Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                        DisplayName = info.Principal.FindFirstValue(ClaimTypes.Name),
+                        DisplayName = info.Principal.Identity.Name,
                     };
                 }
                 return Page();
@@ -164,7 +164,7 @@ namespace CMSClone.Server.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.DisplayName = Input.DisplayName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 

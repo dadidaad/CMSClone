@@ -1,12 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Security.Claims
 
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <AuthorizeView>
     <Authorized>
-        <a href="authentication/profile">Hello, @context.User.Identity?.Name!</a>
+        <a href="authentication/profile">Hello, @context.User.Claims.FirstOrDefault(x => x.Type == "DisplayName").Value!</a>
         <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
     </Authorized>
     <NotAuthorized>

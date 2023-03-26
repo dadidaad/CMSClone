@@ -1,0 +1,43 @@
+﻿@page "/createCourse"
+@using CMSClone.Client.HttpRepositories
+@using CMSClone.Shared.Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@attribute [Authorize(Roles = "Teacher")]
+<h3>CreateCourse</h3>
+
+<EditForm Model="@_course" OnValidSubmit="@Create" class="card card-body bg-light mt-5">
+    <DataAnnotationsValidator />
+    <div class="mb-3 row">
+        <label for="name" class="col-md-2 col-form-label">Course Code:</label>
+        <div class="col-md-10">
+            <InputText id="name" class="form-control" @bind-Value="_course.CourseCode" />
+            <ValidationMessage For="@(() => _course.CourseCode)" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="name" class="col-md-2 col-form-label">Course Name:</label>
+        <div class="col-md-10">
+            <InputText id="name" class="form-control" @bind-Value="_course.CourseName" />
+            <ValidationMessage For="@(() => _course.CourseName)" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success">Create</button>
+        </div>
+    </div>
+</EditForm>
+<SuccessNotification @ref="_notification" />
+@code {
+    private CourseDTO _course = new CourseDTO();
+    private SuccessNotification _notification;
+
+    [Inject]
+    public ICourseHttpRepository CourseRepo { get; set; }
+    private async Task Create()
+    {
+        await CourseRepo.CreateCourse(_course);
+        _notification.Show();
+    }
+}

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSClone.Server", "CMSClone\Server\CMSClone.Server.csproj", "{A2379C53-2FC5-4134-99E7-4B5AFE03B10B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMSClone.Server", "CMSClone\Server\CMSClone.Server.csproj", "{A2379C53-2FC5-4134-99E7-4B5AFE03B10B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSClone.Client", "CMSClone\Client\CMSClone.Client.csproj", "{62BF2EC8-8CB0-4809-B64B-17832AD56B53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMSClone.Client", "CMSClone\Client\CMSClone.Client.csproj", "{62BF2EC8-8CB0-4809-B64B-17832AD56B53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSClone.Shared", "CMSClone\Shared\CMSClone.Shared.csproj", "{ECD9FC65-A700-40A1-A955-5C426F8C8C3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMSClone.Shared", "CMSClone\Shared\CMSClone.Shared.csproj", "{ECD9FC65-A700-40A1-A955-5C426F8C8C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

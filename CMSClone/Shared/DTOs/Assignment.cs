@@ -25,7 +25,7 @@ namespace CMSClone.Shared.Models
         [Required]
         [ForeignKey("Course")]
         public Guid CourseId { get; set; }
-        public Course? Course { get; set; }
+        public CourseDTO? Course { get; set; }
 
         public virtual ICollection<FileUpload>? FilesUploadGiven { get; set; }
     }
